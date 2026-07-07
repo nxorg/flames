@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLAMES - Interactive Relationship Calculator</title>
+  <meta name="description" content="Discover your destiny with the interactive FLAMES relationship calculator. Complete with glassmorphic designs, visual stepper animations, particle bursts, and retro synthesizer music.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="/assets/logo-BeinXYDb.jpg">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://flames.xchip.in/">
+  <meta property="og:title" content="FLAMES - Interactive Relationship Calculator">
+  <meta property="og:description" content="Discover your relationship affinity with live stepper animations, visual letter crossings, and sound synthesis.">
+  <meta property="og:image" content="/assets/logo-BeinXYDb.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://flames.xchip.in/">
+  <meta name="twitter:title" content="FLAMES - Interactive Relationship Calculator">
+  <meta name="twitter:description" content="Discover your relationship affinity with live stepper animations, visual letter crossings, and sound synthesis.">
+  <meta name="twitter:image" content="/assets/logo-BeinXYDb.jpg">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <script type="module" crossorigin src="/assets/index-BT_Ifq1v.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CeMoXhni.css">
+</head>
+<body>
+  <!-- Ambient Particle Background -->
+  <canvas id="particle-canvas"></canvas>
+  <div class="ambient-glow bg-glow-1"></div>
+  <div class="ambient-glow bg-glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <i class="fa-solid fa-heart-pulse logo-icon"></i>
+        <span>FLAMES</span>
+      </div>
+      <button id="history-btn" class="icon-btn" title="View History">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </button>
+    </header>
+
+    <main class="main-content">
+      <!-- SECTION 1: Input Setup Screen -->
+      <section id="setup-screen" class="screen active">
+        <div class="card glass-card">
+          <div class="card-header">
+            <h1>Discover Your Destiny</h1>
+            <p class="subtitle">Enter two names to reveal the cosmic thread that binds them.</p>
+          </div>
+
+          <form id="flames-form" onsubmit="return false;">
+            <div class="input-group">
+              <div class="floating-input">
+                <input type="text" id="name1" required autocomplete="off" placeholder=" ">
+                <label for="name1"><i class="fa-solid fa-user-circle"></i> Your Name</label>
+                <div class="input-line"></div>
+              </div>
+            </div>
+
+            <div class="vs-divider">
+              <div class="vs-line"></div>
+              <div class="vs-circle"><i class="fa-solid fa-heart"></i></div>
+              <div class="vs-line"></div>
+            </div>
+
+            <div class="input-group">
+              <div class="floating-input">
+                <input type="text" id="name2" required autocomplete="off" placeholder=" ">
+                <label for="name2"><i class="fa-solid fa-heart-pulse"></i> Partner's Name</label>
+                <div class="input-line"></div>
+              </div>
+            </div>
+
+            <!-- Custom S-Meaning selector -->
+            <div class="settings-group">
+              <label class="settings-label">What should the letter 'S' represent?</label>
+              <div class="segmented-control">
+                <input type="radio" name="s-meaning" id="s-soulmate" value="Soulmate" checked>
+                <label for="s-soulmate">Soulmate</label>
+
+                <input type="radio" name="s-meaning" id="s-sister" value="Sister / Sibling">
+                <label for="s-sister">Sibling</label>
+
+                <input type="radio" name="s-meaning" id="s-stranger" value="Stranger">
+                <label for="s-stranger">Stranger</label>
+              </div>
+            </div>
+
+            <button type="submit" id="calculate-btn" class="glow-button">
+              <span>Calculate Affinity</span>
+              <i class="fa-solid fa-sparkles button-glow-sparkle"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Animated Solver Screen -->
+      <section id="solver-screen" class="screen">
+        <div class="card glass-card solver-card">
+          <div class="solver-header">
+            <h2>Cosmic Calculation</h2>
+            <div class="solver-controls">
+              <button id="skip-btn" class="text-btn">Skip Animation</button>
+            </div>
+          </div>
+
+          <!-- Phase 1: Name comparison and crossing out -->
+          <div id="phase-matching" class="solver-phase active">
+            <p class="phase-instruction">Matching and removing common letters...</p>
+            <div class="names-match-container">
+              <div id="name1-letters" class="letter-row"></div>
+              <div class="vs-text">VS</div>
+              <div id="name2-letters" class="letter-row"></div>
+            </div>
+            <div class="status-box">
+              <span id="match-status-text">Analyzing names...</span>
+            </div>
+          </div>
+
+          <!-- Phase 2: Elimination of FLAMES letters -->
+          <div id="phase-elimination" class="solver-phase">
+            <p class="phase-instruction">Eliminating FLAMES letters based on remaining letter count...</p>
+            <div class="count-display-box">
+              <span class="count-label">Remaining Letter Count:</span>
+              <span id="remaining-count" class="count-number">0</span>
+            </div>
+            <div id="flames-letters-container" class="flames-row">
+              <div class="flames-letter-card" data-letter="F"><span class="letter">F</span><span class="meaning">Friendship</span></div>
+              <div class="flames-letter-card" data-letter="L"><span class="letter">L</span><span class="meaning">Love</span></div>
+              <div class="flames-letter-card" data-letter="A"><span class="letter">A</span><span class="meaning">Affection</span></div>
+              <div class="flames-letter-card" data-letter="M"><span class="letter">M</span><span class="meaning">Marriage</span></div>
+              <div class="flames-letter-card" data-letter="E"><span class="letter">E</span><span class="meaning">Enemy</span></div>
+              <div class="flames-letter-card" data-letter="S"><span class="letter">S</span><span class="meaning">Soulmate</span></div>
+            </div>
+            <div class="status-box">
+              <span id="elim-status-text">Starting elimination process...</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Result Screen -->
+      <section id="result-screen" class="screen">
+        <div id="result-card" class="card glass-card result-card">
+          <div class="result-badge-container">
+            <div id="result-badge" class="result-badge">
+              <span id="result-badge-letter">L</span>
+            </div>
+          </div>
+          
+          <h2 id="result-name">LOVE</h2>
+          <p id="result-desc" class="result-description">A profound bond that transcends words, showing deep affection and spiritual alignment.</p>
+
+          <div class="names-summary">
+            <span id="summary-name1" class="summary-name">Name 1</span>
+            <i class="fa-solid fa-heart pulse-heart"></i>
+            <span id="summary-name2" class="summary-name">Name 2</span>
+          </div>
+
+          <div class="result-actions">
+            <button id="restart-btn" class="outline-button">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Calculate Another
+            </button>
+            <button id="share-btn" class="glow-button small-btn">
+              <i class="fa-solid fa-share-nodes"></i> Share Result
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SECTION 4: History Sidebar/Modal -->
+    <div id="history-overlay" class="overlay">
+      <div class="history-sidebar glass-panel">
+        <div class="sidebar-header">
+          <h3>Calculation History</h3>
+          <button id="close-history-btn" class="icon-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <ul id="history-list" class="history-list">
+            <!-- Dynamic elements loaded from LocalStorage -->
+            <li class="empty-history">No history yet. Start calculating!</li>
+          </ul>
+        </div>
+        <div class="sidebar-footer">
+          <button id="clear-history-btn" class="danger-btn">
+            <i class="fa-solid fa-trash-can"></i> Clear History
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio toggle (Mute control) -->
+    <div class="audio-control">
+      <button id="mute-btn" class="icon-btn" title="Toggle Sound">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Made with <i class="fa-solid fa-heart animated-heart"></i> for cosmic connection</p>
+    </footer>
+  </div>
+
+</body>
+</html>
